@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Z-PROMPT MASTER | ابرپلتفرم مهندسی پرامپت و هوش مصنوعی ایران</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg: #04060b;
+            --surface: #0b101d;
+            --card: rgba(14, 21, 38, 0.88);
+            --card-hover: rgba(20, 30, 54, 0.98);
+            --primary: #00f5a0;
+            --secondary: #00d9f5;
+            --glow: rgba(0, 245, 160, 0.32);
+            --text: #f8fafc;
+            --muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.08);
+            --danger: #f43f5e;
+        }
+
+        [data-theme="purple"] { --primary: #c084fc; --secondary: #6366f1; --glow: rgba(192, 132, 252, 0.32); }
+        [data-theme="gold"] { --primary: #fbbf24; --secondary: #f59e0b; --glow: rgba(251, 191, 36, 0.32); }
+        [data-theme="crimson"] { --primary: #fb7185; --secondary: #e11d48; --glow: rgba(251, 113, 133, 0.32); }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Vazirmatn', system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            background-color: var(--bg);
+            background-image: 
+                radial-gradient(circle at 10% 10%, var(--glow) 0%, transparent 35%),
+                radial-gradient(circle at 90% 85%, rgba(99, 102, 241, 0.08) 0%, transparent 40%);
+            background-attachment: fixed;
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-bottom: 110px;
+            overflow-x: hidden;
+        }
+
+        /* نوار ابزار بالای سایت */
+        .top-bar {
+            width: 100%; max-width: 880px;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 14px 18px 0;
+        }
+
+        .theme-switcher {
+            display: flex; align-items: center; gap: 8px;
+            background: var(--surface); padding: 6px 12px;
+            border-radius: 20px; border: 1px solid var(--border);
+        }
+
+        .t-dot {
+            width: 18px; height: 18px; border-radius: 50%;
+            cursor: pointer; border: 2px solid transparent; transition: 0.2s;
+        }
+        .t-dot.active, .t-dot:hover { transform: scale(1.22); border-color: #fff; }
+
+        .util-btn {
+            background: var(--surface); border: 1px solid var(--border);
+            color: var(--muted); padding: 6px 13px; border-radius: 20px;
+            font-size: 0.78rem; cursor: pointer; display: flex; align-items: center; gap: 6px; font-weight: 700;
+        }
+        .util-btn.on { color: var(--primary); border-color: var(--primary); }
+
+        /* هدر */
+        header { width: 100%; max-width: 880px; padding: 14px 18px 10px; text-align: center; }
+
+        .version-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 0.73rem; background: rgba(255,255,255,0.04); color: var(--primary);
+            border: 1px solid var(--border); padding: 4px 14px; border-radius: 30px; margin-bottom: 8px; font-weight: 700;
+        }
+
+        .logo {
+            font-size: 2.4rem; font-weight: 900;
+            background: linear-gradient(135deg, #fff 30%, var(--primary) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        .logo span {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        header p { color: var(--muted); font-size: 0.88rem; margin-top: 4px; }
+
+        .quick-launch { display: flex; gap: 8px; margin-top: 12px; justify-content: center; flex-wrap: wrap; }
+        .q-link {
+            text-decoration: none; font-size: 0.76rem; color: #e2e8f0;
+            background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+            padding: 5px 12px; border-radius: 10px; display: inline-flex; align-items: center; gap: 5px; transition: 0.2s; font-weight: 600;
+        }
+        .q-link:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-2px); }
+
+        /* ناوبری اصلی */
+        .nav-tabs {
+            display: flex; background: var(--surface); padding: 6px;
+            border-radius: 18px; border: 1px solid var(--border);
+            margin: 14px 0 20px; gap: 6px; width: 95%; max-width: 860px;
+            overflow-x: auto; scrollbar-width: none; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .nav-tabs::-webkit-scrollbar { display: none; }
+
+        .tab-btn {
+            flex: 1; min-width: 110px; padding: 10px 12px; border: none;
+            background: transparent; color: var(--muted); font-size: 0.84rem;
+            font-weight: 700; border-radius: 12px; cursor: pointer; transition: 0.2s;
+            display: flex; align-items: center; justify-content: center; gap: 6px; white-space: nowrap;
+        }
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #04060b; box-shadow: 0 4px 15px var(--glow);
+        }
+
+        .count-pill { background: rgba(0,0,0,0.25); padding: 1px 6px; border-radius: 8px; font-size: 0.7rem; }
+
+        /* پنل‌ها */
+        .panel { display: none; width: 100%; max-width: 860px; padding: 0 16px; }
+        .panel.active { display: block; animation: fade 0.2s ease-out; }
+        @keyframes fade { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* جستجو و دسته‌بندی */
+        .search-box { position: relative; margin-bottom: 12px; }
+        .search-box input {
+            width: 100%; padding: 14px 44px 14px 40px;
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 15px; color: #fff; font-size: 0.93rem; outline: none; transition: 0.2s;
+        }
+        .search-box input:focus { border-color: var(--primary); box-shadow: 0 0 14px var(--glow); }
+        .search-box .s-ico { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); color: var(--muted); }
+        .search-box .c-ico { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); cursor: pointer; display: none; padding: 4px; }
+
+        .cats { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 14px; scrollbar-width: none; }
+        .cats::-webkit-scrollbar { display: none; }
+        .chip {
+            background: var(--surface); border: 1px solid var(--border);
+            color: var(--muted); padding: 7px 15px; border-radius: 22px;
+            white-space: nowrap; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: 0.2s;
+        }
+        .chip.active, .chip:hover { color: var(--primary); border-color: var(--primary); background: rgba(255,255,255,0.05); }
+
+        /* کارت پرامپت */
+        .feed { display: flex; flex-direction: column; gap: 15px; }
+        .p-card {
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 18px; padding: 18px; backdrop-filter: blur(12px); transition: 0.2s;
+        }
+        .p-card:hover { border-color: var(--primary); background: var(--card-hover); }
+
+        .c-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 6px; }
+        .c-title { font-size: 1rem; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 8px; line-height: 1.5; }
+        .ai-tag {
+            font-size: 0.7rem; padding: 3px 9px; border-radius: 7px; font-weight: 700;
+            white-space: nowrap; background: rgba(255,255,255,0.06); color: var(--primary); border: 1px solid var(--border);
+        }
+        .c-desc { font-size: 0.84rem; color: var(--muted); margin-bottom: 10px; line-height: 1.6; }
+
+        .vars-box {
+            display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px;
+            background: rgba(255,255,255,0.03); padding: 9px; border-radius: 11px; border: 1px solid var(--border);
+        }
+        .vars-box input {
+            flex: 1; min-width: 140px; background: rgba(0,0,0,0.45);
+            border: 1px solid var(--border); color: var(--primary);
+            padding: 7px 11px; border-radius: 8px; font-size: 0.81rem; outline: none;
+        }
+        .vars-box input:focus { border-color: var(--primary); }
+
+        .code-area {
+            background: rgba(0,0,0,0.52); border: 1px dashed rgba(255,255,255,0.16);
+            border-radius: 13px; padding: 13px; font-size: 0.9rem; line-height: 1.72;
+            color: #f1f5f9; margin-bottom: 12px; white-space: pre-line; word-break: break-word;
+        }
+        .code-area.ltr { direction: ltr; text-align: left; font-family: 'Consolas', monospace, 'Vazirmatn'; }
+
+        .c-foot {
+            display: flex; justify-content: space-between; align-items: center;
+            padding-top: 10px; border-top: 1px solid var(--border); flex-wrap: wrap; gap: 8px;
+        }
+        .meta-info { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+        .tag-b { font-size: 0.73rem; color: var(--secondary); background: rgba(255,255,255,0.05); padding: 3px 9px; border-radius: 7px; font-weight: 600; }
+        .token-b { font-size: 0.7rem; color: var(--muted); background: rgba(255,255,255,0.03); padding: 3px 8px; border-radius: 6px; }
+
+        .btn-row { display: flex; gap: 7px; }
+        .act-btn {
+            background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+            color: var(--text); padding: 7px 13px; border-radius: 9px; cursor: pointer;
+            font-size: 0.82rem; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s; text-decoration: none;
+        }
+        .act-btn.primary { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #04060b; border: none; }
+        .act-btn:hover { transform: translateY(-1px); filter: brightness(1.1); }
+        .act-btn.saved { color: var(--danger); border-color: rgba(244,63,94,0.4); background: rgba(244,63,94,0.1); }
+
+        /* بخش مهندس پرامپت‌ساز و ارتقادهنده */
+        .mode-switch { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+        .m-btn {
+            flex: 1; min-width: 140px; padding: 11px; background: var(--surface);
+            border: 1px solid var(--border); color: var(--muted); border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 0.84rem;
+        }
+        .m-btn.active { border-color: var(--primary); color: var(--primary); background: rgba(255,255,255,0.04); }
+
+        .box-card { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 18px; margin-bottom: 16px; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 12px; margin-top: 10px; }
+        .f-grp label { display: block; font-size: 0.78rem; color: var(--primary); margin-bottom: 5px; font-weight: 700; }
+        .f-ctrl {
+            width: 100%; padding: 10px 11px; background: rgba(0,0,0,0.45);
+            border: 1px solid var(--border); border-radius: 10px; color: #fff; font-size: 0.86rem; outline: none;
+        }
+        .f-ctrl:focus { border-color: var(--primary); }
+
+        /* گرید رادار سایت‌ها */
+        .radar-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+        .r-card {
+            background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+            padding: 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 10px; transition: 0.2s;
+        }
+        .r-card:hover { border-color: var(--primary); transform: translateY(-2px); }
+
+        /* پشتیبانی VIP */
+        .vip-card {
+            background: linear-gradient(145deg, rgba(11,16,30,0.96), rgba(20,30,55,0.96));
+            border: 1px solid var(--primary); border-radius: 22px; padding: 34px 22px;
+            text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+        }
+        .vip-ava {
+            width: 80px; height: 80px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2.2rem; color: #04060b; margin: 0 auto 14px; box-shadow: 0 0 25px var(--glow);
+        }
+        .vip-id {
+            display: inline-block; direction: ltr; font-size: 1.35rem; font-weight: 900;
+            color: var(--primary); background: rgba(255,255,255,0.04);
+            padding: 8px 22px; border-radius: 13px; margin: 12px 0 20px; border: 1px dashed var(--primary);
+        }
+
+        /* دکمه شانسی و توست */
+        .fab {
+            position: fixed; bottom: 22px; left: 22px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #04060b; border: none; padding: 11px 18px; border-radius: 30px;
+            cursor: pointer; box-shadow: 0 6px 25px var(--glow); font-size: 0.86rem;
+            font-weight: 800; display: flex; align-items: center; gap: 7px; z-index: 99;
+        }
+        .toast {
+            position: fixed; top: 22px; background: var(--primary); color: #04060b;
+            padding: 10px 22px; border-radius: 30px; font-size: 0.88rem; font-weight: 800;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.6); opacity: 0; transform: translateY(-20px);
+            transition: 0.25s; pointer-events: none; z-index: 3000;
+        }
+        .toast.show { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+
+    <!-- نوار تنظیمات بالای صفحه -->
+    <div class="top-bar">
+        <div class="theme-switcher">
+            <span style="font-size:0.74rem; color:var(--muted);">تم نئون:</span>
+            <div class="t-dot active" style="background:#00f5a0;" onclick="changeTheme('default', this)" title="سبز سایبری"></div>
+            <div class="t-dot" style="background:#c084fc;" onclick="changeTheme('purple', this)" title="بنفش نئون"></div>
+            <div class="t-dot" style="background:#fbbf24;" onclick="changeTheme('gold', this)" title="طلایی VIP"></div>
+            <div class="t-dot" style="background:#fb7185;" onclick="changeTheme('crimson', this)" title="قرمز گیمینگ"></div>
+        </div>
+        <button class="util-btn on" id="soundToggleBtn" onclick="toggleAudio()">
+            <i class="fa-solid fa-volume-high"></i> صدا: فعال
+        </button>
+    </div>
+
+    <header>
+        <div class="version-badge"><i class="fa-solid fa-shield-check"></i> Z-PROMPT MASTER v5.0 | ZERO-BUG EDITION</div>
+        <div class="logo"><i class="fa-solid fa-microchip"></i> Z-<span>PROMPT</span></div>
+        <p>کامل‌ترین مرجع مهندسی پرامپت، ارتقادهنده هوشمند و ابزارهای هوش مصنوعی</p>
+        <div class="quick-launch">
+            <a href="https://chatgpt.com" target="_blank" class="q-link"><i class="fa-solid fa-bolt"></i> ChatGPT</a>
+            <a href="https://www.bing.com/images/create" target="_blank" class="q-link"><i class="fa-solid fa-paintbrush"></i> عکس‌ساز Bing</a>
+            <a href="https://gemini.google.com" target="_blank" class="q-link"><i class="fa-solid fa-sparkles"></i> Gemini</a>
+            <a href="https://claude.ai" target="_blank" class="q-link"><i class="fa-solid fa-code"></i> Claude AI</a>
+        </div>
+    </header>
+
+    <!-- منوی ۶ تبی -->
+    <nav class="nav-tabs">
+        <button class="tab-btn active" onclick="showTab('bankTab', this)"><i class="fa-solid fa-fire"></i> بانک پرامپت</button>
+        <button class="tab-btn" onclick="showTab('builderTab', this)"><i class="fa-solid fa-wand-magic-sparkles"></i> مهندس پرامپت‌ساز</button>
+        <button class="tab-btn" onclick="showTab('radarTab', this)"><i class="fa-solid fa-satellite-dish"></i> رادار سایت‌های AI</button>
+        <button class="tab-btn" onclick="showTab('secretTab', this)"><i class="fa-solid fa-user-secret"></i> کدهای مخفی</button>
+        <button class="tab-btn" onclick="showTab('savedTab', this)"><i class="fa-solid fa-bookmark"></i> دفترچه من <span class="count-pill" id="favCounter">0</span></button>
+        <button class="tab-btn" onclick="showTab('supportTab', this)"><i class="fa-solid fa-headset"></i> پشتیبانی VIP</button>
+    </nav>
+
+    <!-- تب ۱: بانک بی‌نهایت پرامپت -->
+    <main id="bankTab" class="panel active">
+        <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass s-ico"></i>
+            <input type="text" id="searchInp" placeholder="جستجو در هزاران پرامپت (مثلا: پروفایل، لوگو، ریلز، یوتیوب، کدنویسی، جزوه...)">
+            <i class="fa-solid fa-xmark c-ico" id="clearBtn" onclick="resetSearch()"></i>
+        </div>
+
+        <div class="cats" id="catRow">
+            <button class="chip active" data-cat="all">⚡ همه دستورات</button>
+            <button class="chip" data-cat="ساخت عکس">🎨 ساخت عکس و آواتار</button>
+            <button class="chip" data-cat="اینستاگرام">📱 اینستاگرام و تولید محتوا</button>
+            <button class="chip" data-cat="کسب درآمد">💰 کسب درآمد و بیزنس</button>
+            <button class="chip" data-cat="درس و دانشگاه">🎓 درس، زبان و مقاله</button>
+            <button class="chip" data-cat="کدنویسی">💻 برنامه‌نویسی و سایت</button>
+        </div>
+
+        <div class="feed" id="mainFeed"></div>
+
+        <div style="text-align:center; padding:22px; color:var(--muted); font-size:0.85rem;">
+            <i class="fa-solid fa-circle-notch fa-spin"></i> اسکرول کنید؛ پرامپت‌های مهندسی‌شده جدید خودکار تولید می‌شوند...
+        </div>
+    </main>
+
+    <!-- تب ۲: مهندس پرامپت‌ساز ۳ حالته -->
+    <section id="builderTab" class="panel">
+        <div class="mode-switch">
+            <button class="m-btn active" id="mBtn1" onclick="setBuilderMode(1)"><i class="fa-solid fa-image"></i> ۱. پرامپت‌ساز تصویر 8K</button>
+            <button class="m-btn" id="mBtn2" onclick="setBuilderMode(2)"><i class="fa-solid fa-comments"></i> ۲. پرامپت‌ساز CO-STAR متنی</button>
+            <button class="m-btn" id="mBtn3" onclick="setBuilderMode(3)"><i class="fa-solid fa-bolt"></i> ۳. ارتقادهنده جادویی یک‌کلمه‌ای</button>
+        </div>
+
+        <!-- حالت ۱: عکس -->
+        <div id="bBox1" class="box-card">
+            <h3 style="color:var(--primary); font-size:0.98rem;">مهندسی تصویر استودیویی + پرامپت منفی (Negative Prompt)</h3>
+            <div class="form-grid">
+                <div class="f-grp">
+                    <label>سوژه اصلی (Subject):</label>
+                    <input type="text" id="bImgSub" class="f-ctrl" placeholder="e.g. A cybernetic samurai warrior" oninput="runBuilder()">
+                </div>
+                <div class="f-grp">
+                    <label>اسم یا متن روی تصویر (اختیاری):</label>
+                    <input type="text" id="bImgTxt" class="f-ctrl" placeholder="e.g. AMIR" oninput="runBuilder()">
+                </div>
+                <div class="f-grp">
+                    <label>سبک و موتور رندر:</label>
+                    <select id="bImgStyle" class="f-ctrl" onchange="runBuilder()">
+                        <option value="Hyper-realistic 8k photography, shot on 85mm lens f/1.4, Unreal Engine 5, Octane Render">فوق واقع‌گرایانه سینمایی (8K Realistic)</option>
+                        <option value="Cyberpunk dark neon aesthetic, rain reflections, futuristic high-tech vibe">سایبرپانک نئونی و دارک گنگ</option>
+                        <option value="3D Disney Pixar character design, cute & expressive, subsurface scattering">انیمیشن ۳ بعدی دیزنی / پیکسار</option>
+                        <option value="Dark anime masterpiece, Ufotable & Makoto Shinkai style, dynamic glowing aura">انیمه سینمایی با جزئیات بالا</option>
+                        <option value="Minimalist vector esports mascot logo, flat clean lines, pitch black background">لوگو گیمینگ و ورزشی (Esports Logo)</option>
+                    </select>
+                </div>
+                <div class="f-grp">
+                    <label>حذف خطاها (Negative Prompt):</label>
+                    <select id="bImgNeg" class="f-ctrl" onchange="runBuilder()">
+                        <option value="--ar 1:1 --v 6.0 --no ugly, deformed hands, extra fingers, blurry, watermark, low quality">مربع پروفایل (1:1) + ضد خرابی چهره و دست</option>
+                        <option value="--ar 9:16 --v 6.0 --no ugly, deformed hands, extra fingers, blurry, watermark">عمودی استوری و ریلز (9:16) + ضد خرابی</option>
+                        <option value="--ar 16:9 --v 6.0 --no blurry, low resolution, watermark">افقی یوتیوب و دسکتاپ (16:9)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- حالت ۲: متنی -->
+        <div id="bBox2" class="box-card" style="display:none;">
+            <h3 style="color:var(--primary); font-size:0.98rem;">مهندسی پرامپت متنی با چارچوب جهانی CO-STAR</h3>
+            <div class="form-grid">
+                <div class="f-grp">
+                    <label>نقش تخصصی هوش مصنوعی:</label>
+                    <select id="bTxtRole" class="f-ctrl" onchange="runBuilder()">
+                        <option value="یک استراتژیست ارشد الگوریتم اینستاگرام و یوتیوب با ۱۰ سال سابقه">متخصص اینستاگرام و تولید محتوا</option>
+                        <option value="یک مهندس ارشد نرم‌افزار Full-Stack و معمار سیستم">برنامه‌نویس و طراح سایت ارشد</option>
+                        <option value="یک استاد دانشگاه برجسته و معلم خصوصی به روش فاینمن">استاد دانشگاه و مدرس خصوصی</option>
+                        <option value="یک مشاور ارشد بیزنس، روان‌شناسی فروش و کپی‌رایتینگ">مشاور کسب‌وکار و فروش</option>
+                    </select>
+                </div>
+                <div class="f-grp">
+                    <label>هدف یا خواسته دقیق شما:</label>
+                    <input type="text" id="bTxtGoal" class="f-ctrl" placeholder="مثال: سناریوی جذب فالوور برای پیج گیمینگ" oninput="runBuilder()">
+                </div>
+                <div class="f-grp">
+                    <label>لحن و ساختار خروجی:</label>
+                    <select id="bTxtTone" class="f-ctrl" onchange="runBuilder()">
+                        <option value="کاملاً کاربردی، بدون مقدمه‌چینی رباتیک، ۱۰۰٪ انسانی و به صورت گام‌به‌گام">حرفه‌ای، بدون حاشیه و گام‌به‌گام</option>
+                        <option value="خلاقانه، وایرال، صمیمی و همراه با جدول مقایسه‌ای">خلاقانه، وایرال + جدول</option>
+                        <option value="به ساده‌ترین زبان ممکن همراه با مثال‌های واقعی و قابل اجرا">آموزشی ساده با مثال عملی</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- حالت ۳: ارتقادهنده جادویی -->
+        <div id="bBox3" class="box-card" style="display:none;">
+            <h3 style="color:var(--primary); font-size:0.98rem;">ارتقادهنده جادویی (تبدیل ایده کوتاه به پرامپت Masterpiece)</h3>
+            <p style="color:var(--muted); font-size:0.82rem; margin:4px 0 10px;">یک سوژه ساده بنویسید تا سیستم به صورت خودکار پارامترهای لنز، نورپردازی سینمایی و جزئیات استودیویی را به آن اضافه کند:</p>
+            <input type="text" id="bMagicInp" class="f-ctrl" placeholder="مثال: A black sports car in rainy Tokyo (یا هر سوژه دلخواه)" oninput="runBuilder()">
+        </div>
+
+        <div id="builderResultArea"></div>
+    </section>
+
+    <!-- تب ۳: رادار سایت‌های هوش مصنوعی -->
+    <section id="radarTab" class="panel">
+        <div class="box-card" style="margin-bottom:14px;">
+            <h3 style="color:var(--primary); font-size:1rem;"><i class="fa-solid fa-satellite-dish"></i> رادار بهترین ابزارهای رایگان هوش مصنوعی دنیا</h3>
+            <p style="color:var(--muted); font-size:0.83rem; margin-top:4px;">روی هر ابزار کلیک کنید تا مستقیماً وارد سایت اصلی آن شوید:</p>
+        </div>
+        <div class="radar-grid" id="radarContainer"></div>
+    </section>
+
+    <!-- تب ۴: کدهای مخفی -->
+    <section id="secretTab" class="panel">
+        <div class="feed" id="secretContainer"></div>
+    </section>
+
+    <!-- تب ۵: دفترچه من + افزودن پرامپت شخصی + خروجی فایل -->
+    <section id="savedTab" class="panel">
+        <div class="box-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:10px;">
+                <h3 style="color:var(--primary); font-size:0.98rem;"><i class="fa-solid fa-plus-circle"></i> ذخیره پرامپت شخصی در دفترچه</h3>
+                <button class="act-btn" onclick="exportSavedFile()">
+                    <i class="fa-solid fa-file-arrow-down"></i> دانلود کل ذخیره‌شده‌ها (.txt)
+                </button>
+            </div>
+            <div class="form-grid">
+                <input type="text" id="usrTitle" class="f-ctrl" placeholder="عنوان پرامپت...">
+                <input type="text" id="usrCode" class="f-ctrl" placeholder="متن پرامپت...">
+                <button class="act-btn primary" style="justify-content:center;" onclick="saveUserCustomPrompt()">
+                    <i class="fa-solid fa-check"></i> افزودن به دفترچه
+                </button>
+            </div>
+        </div>
+        <div class="feed" id="savedContainer"></div>
+    </section>
+
+    <!-- تب ۶: پشتیبانی VIP (@amir_zf1) -->
+    <section id="supportTab" class="panel">
+        <div class="vip-card">
+            <div class="vip-ava"><i class="fa-solid fa-user-astronaut"></i></div>
+            <h2 style="font-size:1.5rem; margin-bottom:8px;">پشتیبانی و مدیریت Z-PROMPT</h2>
+            <p style="color:var(--muted); font-size:0.9rem; max-width:480px; margin:0 auto; line-height:1.75;">
+                برای سفارش پرامپت‌های اختصاصی، طراحی وب‌سایت، ثبت تبلیغات یا همکاری، مستقیماً در تلگرام با مدیریت در ارتباط باشید:
+            </p>
+            <div class="vip-id">@amir_zf1</div>
+            <div style="display:flex; justify-content:center; gap:10px; flex-wrap:wrap;">
+                <a href="https://t.me/amir_zf1" target="_blank" class="act-btn primary" style="padding:12px 22px; font-size:0.92rem;">
+                    <i class="fa-brands fa-telegram" style="font-size:1.2rem;"></i> پیام مستقیم در تلگرام
+                </a>
+                <button class="act-btn" style="padding:12px 18px;" onclick="copySafe('@amir_zf1', 'آیدی @amir_zf1 کپی شد! ✨')">
+                    <i class="fa-regular fa-copy"></i> کپی آیدی تلگرام
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <button class="fab" onclick="copyRandom()"><i class="fa-solid fa-dice"></i> پرامپت شانسی!</button>
+    <div class="toast" id="toastEl">کپی شد! ✨</div>
+
+    <script>
+        /* ۱. موتور افکت صوتی دیجیتال بدون نیاز به فایل خارجی */
+        let audioOn = true;
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+
+        function beep(freq = 620, dur = 0.05) {
+            if (!audioOn) return;
+            try {
+                if (!audioCtx) audioCtx = new AudioContextClass();
+                const osc = audioCtx.createOscillator();
+                const g = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                g.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+                osc.connect(g);
+                g.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + dur);
+            } catch (e) {}
+        }
+
+        function toggleAudio() {
+            audioOn = !audioOn;
+            const b = document.getElementById('soundToggleBtn');
+            b.classList.toggle('on', audioOn);
+            b.innerHTML = audioOn ? '<i class="fa-solid fa-volume-high"></i> صدا: فعال' : '<i class="fa-solid fa-volume-xmark"></i> صدا: خاموش';
+            if (audioOn) beep(740, 0.07);
+        }
+
+        /* ۲. تغییر تم نئونی */
+        function changeTheme(name, el) {
+            beep(500, 0.04);
+            if (name === 'default') document.documentElement.removeAttribute('data-theme');
+            else document.documentElement.setAttribute('data-theme', name);
+            document.querySelectorAll('.t-dot').forEach(d => d.classList.remove('active'));
+            if (el) el.classList.add('active');
+            localStorage.setItem('zp_theme', name);
+        }
+
+        /* ۳. دیتابیس رادار سایت‌ها و کدهای مخفی */
+        const radarTools = [
+            { name: "Suno AI", cat: "ساخت آهنگ و موزیک", desc: "تبدیل متن فارسی یا انگلیسی به آهنگ کامل با صدای خواننده و ملودی استودیویی.", url: "https://suno.com" },
+            { name: "Bing Image Creator", cat: "ساخت عکس رایگان", desc: "ساخت تصاویر 8K با موتور DALL-E 3 مایکروسافت کاملاً رایگان.", url: "https://www.bing.com/images/create" },
+            { name: "Ideogram 2.0", cat: "لوگو و تایپوگرافی", desc: "بهترین هوش مصنوعی برای درج دقیق اسم و متن انگلیسی روی لباس، لوگو و پوستر.", url: "https://ideogram.ai" },
+            { name: "Gamma App", cat: "ساخت پاورپوینت خودکار", desc: "طراحی صفر تا صد اسلایدهای ارائه دانشگاهی و تجاری در کمتر از ۱ دقیقه.", url: "https://gamma.app" },
+            { name: "Kling AI", cat: "تبدیل عکس به ویدیو", desc: "زنده کردن تصاویر ثابت و ساخت ویدیوهای سینمایی خیره‌کننده.", url: "https://klingai.com" },
+            { name: "Leonardo AI", cat: "گرافیک و کاراکتر", desc: "تولید روزانه آواتارهای گیمینگ، سه‌بعدی و ویرایش حرفه ای تصویر.", url: "https://leonardo.ai" },
+            { name: "ElevenLabs", cat: "تقلید و تولید صدا", desc: "تبدیل متن به گفتار فوق طبیعی برای نریشن یوتیوب و ریلز اینستاگرام.", url: "https://elevenlabs.io" },
+            { name: "Claude 3.5 Sonnet", cat: "کدنویسی و متن", desc: "دقیق‌ترین هوش مصنوعی دنیا برای نوشتن کدهای بدون باگ و متون طبیعی.", url: "https://claude.ai" }
+        ];
+
+        const secretCodes = [
+            {
+                title: "کد مخفی انسانی‌ساز متن (Humanizer Pro - ضد تشخیص ربات)",
+                desc: "این دستور را به انتهای پرامپت‌های متنی اضافه کنید تا لحن رباتیک ChatGPT کاملاً از بین برود:",
+                code: "متن را طوری بنویس که دارای Burstiness و Perplexity طبیعی انسانی باشد (جملات کوتاه و بلند ترکیب شوند). از عبارات کلیشه‌ای هوش مصنوعی مثل «در دنیای امروز»، «در نهایت» و مقدمه‌چینی‌های مصنوعی مطلقاً استفاده نکن و مستقیم سر اصل مطلب برو."
+            },
+            {
+                title: "فرمان قفل‌شکاف منطق و استدلال عمیق (Zero-Shot Chain of Thought)",
+                desc: "اضافه کردن این پاراگراف دقت حل مسئله، کدنویسی و استراتژی هوش مصنوعی را ۳ برابر می‌کند:",
+                code: "قبل از ارائه پاسخ نهایی، مسئله را گام‌به‌گام کالبدشکافی کن. فرضیات اولیه را به چالش بکش، نقاط ضعف احتمالی را بررسی کن و پس از اطمینان از نبود هیچ‌گونه خطا، بهترین و کامل‌ترین خروجی اجرایی را بنویس."
+            },
+            {
+                title: "کد مخفی منتقد بی‌رحم (Brutal Critic Mode)",
+                desc: "مخصوص زمانی که می‌خواهید ایرادهای واقعی ایده‌تان، کدتان یا پیج اینستاگرامتان را بدون تعارف بفهمید:",
+                code: "تعارف و لحن بیش‌ازحد مودبانه همیشگی را کنار بگذار و نقش یک داور و منتقد سخت‌گیر با ۲۰ سال سابقه را بازی کن. تمام حفره‌ها، اشتباهات و نقاط ضعف کار من را صریح بگو و برای هر مورد راه‌حل اصلاحی بده."
+            }
+        ];
+
+        /* ۴. استور مرکزی بدون باگ پرامپت‌ها */
+        const store = new Map();
+        let promptIds = [];
+        let favIds = [];
+
+        try {
+            const s = JSON.parse(localStorage.getItem('zp_master_favs') || '[]');
+            if (Array.isArray(s)) favIds = s;
+        } catch (e) { favIds = []; }
+
+        const seedData = [
+            {
+                id: "p_1",
+                title: "آواتار ۳ بعدی گیمینگ با درج اسم اختصاصی روی هودی",
+                desc: "نام دلخواه خودتان را در کادر زیر تایپ کنید تا خودکار وارد پرامپت شود:",
+                template: "A hyper-realistic 3D character of a cool 20-year-old boy wearing a black oversized glowing neon hoodie with the bold typography '{NAME}' written in metallic gold on the chest, sitting on a pro gaming chair, cyberpunk studio background, Unreal Engine 5, Octane Render, 8k resolution --ar 1:1 --v 6.0",
+                vars: [{ key: "NAME", label: "نام روی لباس (انگلیسی):", def: "AMIR" }],
+                cat: "ساخت عکس",
+                ai: "Bing / Ideogram",
+                ltr: true
+            },
+            {
+                id: "p_2",
+                title: "سناریونویس ریلز میلیونی اینستاگرام با فرمول قلاب ۳ ثانیه",
+                desc: "موضوع پیج خود را وارد کنید تا ۵ سناریوی وایرال آماده ضبط تحویل بگیرید:",
+                template: "تو یک استراتژیست ارشد الگوریتم اینستاگرام هستی. من یک پیج در حوزه «{NICHE}» دارم. ۵ سناریوی ریلز وایرال به من بده که هر کدام دقیقاً شامل این ۳ بخش باشد:\n۱. قلاب (Hook) شدیداً کنجکاوکننده در ۳ ثانیه اول (متن روی تصویر + دیالوگ اول).\n۲. بدنه کوتاه، سریع و بدون حاشیه.\n۳. کال تو اکشن (CTA) روان‌شناختی که مخاطب را ترغیب به Save و ارسال پست برای دوستانش کند.",
+                vars: [{ key: "NICHE", label: "موضوع پیج شما:", def: "هوش مصنوعی و ترفند موبایل" }],
+                cat: "اینستاگرام",
+                ai: "ChatGPT / Gemini",
+                ltr: false
+            },
+            {
+                id: "p_3",
+                title: "تبدیل عکس شخصی به انیمه سینمایی تاریک (حفظ ۱۰۰٪ چهره)",
+                desc: "عکس خود را به ChatGPT بدهید و این پرامپت دقیق را زیر آن بنویسید:",
+                template: "Transform the person in this uploaded photo into a high-budget dark anime character in the style of Ufotable and Makoto Shinkai. Strictly preserve the exact facial structure, hairstyle, glasses, and pose. Add dramatic glowing neon rim lighting, cinematic depth of field, 8k masterpiece.",
+                vars: [],
+                cat: "ساخت عکس",
+                ai: "ChatGPT / Midjourney",
+                ltr: true
+            },
+            {
+                id: "p_4",
+                title: "طراحی لوگو وکتور گیمینگ و یوتیوب با اسم دلخواه",
+                desc: "نام برند یا چنل و نماد دلخواه خود را وارد کنید:",
+                template: "A sleek minimalist esports mascot vector logo of a {SYMBOL}, wearing gaming headphones, integrated with bold futuristic typography reading '{BRAND}', glowing emerald green and cyber purple lines, pitch black background, symmetrical, Dribbble winner, 8k --no blurry, realistic photo",
+                vars: [
+                    { key: "BRAND", label: "نام برند یا کلن:", def: "Z-PROMPT" },
+                    { key: "SYMBOL", label: "نماد (مثلا cyber wolf / samurai):", def: "cybernetic wolf" }
+                ],
+                cat: "ساخت عکس",
+                ai: "Ideogram / Midjourney",
+                ltr: true
+            },
+            {
+                id: "p_5",
+                title: "معلم خصوصی و خلاصه‌ساز مباحث سخت امتحانی به روش فاینمن",
+                desc: "نام درس یا مبحث را بنویسید تا در سریع‌ترین زمان ممکن آن را یاد بگیرید:",
+                template: "من می‌خواهم مبحث «{TOPIC}» را برای امتحان به طور عمیق یاد بگیرم. لطفاً:\n۱. آن را به روش فاینمن (به ساده‌ترین زبان ممکن همراه با یک مثال ملموس دنیای واقعی) توضیح بده.\n۲. فرمول‌ها و نکات پرتکرار امتحانی را بولت‌بندی کن.\n۳. در پایان ۴ سوال استاندارد امتحانی (از ساده به سخت) با پاسخ تشریحی طرح کن.",
+                vars: [{ key: "TOPIC", label: "نام درس یا مبحث:", def: "هوش مصنوعی و شبکه‌های عصبی" }],
+                cat: "درس و دانشگاه",
+                ai: "ChatGPT / Claude",
+                ltr: false
+            },
+            {
+                id: "p_6",
+                title: "ساخت وب‌سایت کامل و تک‌فایلی بدون باگ (Full-Stack HTML)",
+                desc: "ایده سایت خود را بنویسید تا هوش مصنوعی کد کامل و آماده اجرای آن را بنویسد:",
+                template: "تو یک برنامه‌نویس ارشد فرانت‌اند هستی. یک وب‌اپلیکیشن کامل، مدرن و ۱۰۰٪ بدون باگ برای «{IDEA}» در یک فایل واحد HTML (شامل CSS3 مدرن با تم دارک نئونی و JavaScript خالص) بنویس. تمام دکمه‌ها باید کار کنند، صفحه کاملاً راست‌چین با فونت وزیرمتن باشد و هیچ کدی را ناقص یا خلاصه نگذاری.",
+                vars: [{ key: "IDEA", label: "موضوع وب‌سایت:", def: "فروشگاه آنلاین اکانت و محصولات دیجیتال" }],
+                cat: "کدنویسی",
+                ai: "Claude 3.5 / ChatGPT",
+                ltr: false
+            },
+            {
+                id: "p_7",
+                title: "طراح نقشه راه کسب درآمد و فریلنسری بدون سرمایه",
+                desc: "مهارت یا علاقه خود را بنویسید تا برنامه عملی ۳۰ روزه دریافت کنید:",
+                template: "من روزانه ۳ ساعت وقت آزاد دارم و به حوزه «{SKILL}» علاقه‌مندم اما سرمایه اولیه ندارم. ۳ روش عملی برای کسب درآمد از این مهارت پیشنهاد بده و یک نقشه راه ۴ هفته‌ای (هفته به هفته) برای گرفتن اولین پروژه و رسیدن به درآمد طراحی کن.",
+                vars: [{ key: "SKILL", label: "مهارت یا علاقه شما:", def: "طراحی سایت با هوش مصنوعی و ادمینی" }],
+                cat: "کسب درآمد",
+                ai: "ChatGPT / Gemini",
+                ltr: false
+            }
+        ];
+
+        const poolImages = [
+            { title: "عکاسی پرتره سینمایی در شب بارانی توکیو", sub: "A cinematic street portrait of a mysterious young man in a black trench coat standing in rainy neon-lit Shibuya Tokyo at night" },
+            { title: "والپیپر سوپراسپرت مشکی مات در تونل نئونی", sub: "A custom matte-black Koenigsegg Jesko with glowing cyan headlights speeding through a futuristic tunnel, motion blur, wet asphalt reflections" },
+            { title: "آواتار هکر سایبرپانک با ماسک دیجیتال LED", sub: "A dark techwear hacker wearing a futuristic glowing LED mask sitting in front of floating green holographic code screens" },
+            { title: "فضانورد تنها در سیاره کریستال‌های بنفش", sub: "A lone astronaut in an obsidian spacesuit standing on an alien planet with giant glowing bioluminescent purple crystals" }
+        ];
+
+        const poolTexts = [
+            { title: "تقویم محتوایی ۳۰ روزه تضمینی اینستاگرام", cat: "اینستاگرام", desc: "برنامه کامل یک ماه پست و استوری برای خروج پیج از رکود.", code: "یک جدول تقویم محتوایی ۳۰ روزه برای پیج اینستاگرام طراحی کن که شامل ۴ ستون (روز، فرمت محتوا: ریلز/اسلایدی/استوری، تیتر قلاب‌دار، و هدف پست: جذب/تعامل/فروش) باشد." },
+            { title: "سناریوی ۵ استوری فروش فوری با فرمول PAS", cat: "کسب درآمد", desc: "تبدیل بازدیدکنندگان استوری به خریدار واقعی با روان‌شناسی فروش.", code: "بر اساس فرمول کپی‌رایتینگ PAS (طرح مشکل، تشدید دغدغه، ارائه راه‌حل)، یک سکانس ۵ استوری متوالی برای معرفی و فروش محصول طراحی کن که در استوری آخر مخاطب را ترغیب به پیام دادن در دایرکت کند." },
+            { title: "کد ریویو، رفع باگ و بهینه‌سازی سرعت کد", cat: "کدنویسی", desc: "پیدا کردن سریع خطاهای پنهان و تمیز کردن کدهای برنامه‌نویسی.", code: "به عنوان یک مهندس ارشد نرم‌افزار، کد زیر را بررسی کن: ۱. باگ‌ها و خطاهای احتمالی را مشخص کن. ۲. نسخه بهینه، امن و استاندارد (Clean Code) را بنویس و تغییرات را توضیح بده." }
+        ];
+
+        let genIdx = 1;
+        let activeCat = 'all';
+        let query = '';
+        let busyScroll = false;
+
+        function addPromptToStore(obj) {
+            let final = obj.template || obj.code;
+            const curVars = {};
+            if (obj.vars && obj.vars.length) {
+                obj.vars.forEach(v => {
+                    curVars[v.key] = v.def;
+                    final = final.split(`{${v.key}}`).join(v.def);
+                });
+            }
+            const item = { ...obj, curVars, computed: final };
+            store.set(item.id, item);
+            if (!promptIds.includes(item.id)) promptIds.push(item.id);
+            return item;
+        }
+
+        seedData.forEach(p => addPromptToStore(p));
+
+        try {
+            const customSaved = JSON.parse(localStorage.getItem('zp_user_custom') || '[]');
+            customSaved.forEach(c => addPromptToStore(c));
+        } catch (e) {}
+
+        function spawnMorePrompts(count = 4) {
+            const list = [];
+            for (let i = 0; i < count; i++) {
+                genIdx++;
+                const id = "auto_" + genIdx + "_" + Date.now();
+                if (genIdx % 2 === 0) {
+                    const img = poolImages[(genIdx / 2) % poolImages.length];
+                    list.push(addPromptToStore({
+                        id,
+                        title: `${img.title} (نسخه استودیویی #${genIdx})`,
+                        desc: "پرامپت استاندارد 8K همراه با تنظیمات لنز و پرامپت منفی جهت کپی مستقیم.",
+                        code: `${img.sub}, shot on 85mm lens f/1.4, cinematic volumetric lighting, Unreal Engine 5, 8k resolution --ar 9:16 --v 6.0 --no blurry, low quality, watermark`,
+                        vars: [],
+                        cat: "ساخت عکس",
+                        ai: "Midjourney / Bing",
+                        ltr: true
+                    }));
+                } else {
+                    const txt = poolTexts[genIdx % poolTexts.length];
+                    list.push(addPromptToStore({
+                        id,
+                        title: `${txt.title} (نسخه #${genIdx})`,
+                        desc: txt.desc,
+                        code: txt.code,
+                        vars: [],
+                        cat: txt.cat,
+                        ai: "ChatGPT / Claude",
+                        ltr: false
+                    }));
+                }
+            }
+            return list;
+        }
+
+        spawnMorePrompts(4);
+
+        function buildCardDOM(item) {
+            const isFav = favIds.includes(item.id);
+            const words = item.computed.trim().split(/\s+/).length;
+            const el = document.createElement('div');
+            el.className = 'p-card';
+
+            let varsHTML = '';
+            if (item.vars && item.vars.length) {
+                varsHTML = `<div class="vars-box">` + item.vars.map(v => `
+                    <input type="text" placeholder="${v.label}" value="${item.curVars[v.key]}"
+                           oninput="liveVarUpdate('${item.id}', '${v.key}', this.value)">
+                `).join('') + `</div>`;
+            }
+
+            el.innerHTML = `
+                <div class="c-head">
+                    <div class="c-title"><i class="fa-solid fa-terminal" style="color:var(--primary);"></i> <span>${item.title}</span></div>
+                    <span class="ai-tag">${item.ai}</span>
+                </div>
+                <div class="c-desc">${item.desc}</div>
+                ${varsHTML}
+                <div class="code-area ${item.ltr ? 'ltr' : ''}" id="code_${item.id}">${item.computed}</div>
+                <div class="c-foot">
+                    <div class="meta-info">
+                        <span class="tag-b">#${item.cat}</span>
+                        <span class="token-b"><i class="fa-solid fa-check-double" style="color:var(--primary);"></i> ${words} کلمه | PRO GRADE</span>
+                    </div>
+                    <div class="btn-row">
+                        <button class="act-btn ${isFav ? 'saved' : ''}" id="favbtn_${item.id}" onclick="toggleFav('${item.id}')">
+                            <i class="${isFav ? 'fa-solid' : 'fa-regular'} fa-bookmark"></i>
+                        </button>
+                        <button class="act-btn primary" onclick="copyItem('${item.id}')">
+                            <i class="fa-regular fa-copy"></i> کپی پرامپت
+                        </button>
+                    </div>
+                </div>
+            `;
+            return el;
+        }
+
+        window.liveVarUpdate = function(id, key, val) {
+            const item = store.get(id);
+            if (!item) return;
+            item.curVars[key] = val.trim() || '...';
+            let out = item.template;
+            item.vars.forEach(v => { out = out.split(`{${v.key}}`).join(item.curVars[v.key]); });
+            item.computed = out;
+            const box = document.getElementById(`code_${id}`);
+            if (box) box.textContent = out;
+        };
+
+        function renderMainFeed() {
+            const container = document.getElementById('mainFeed');
+            container.innerHTML = '';
+            const list = promptIds.map(id => store.get(id)).filter(item => {
+                const cOk = activeCat === 'all' || item.cat === activeCat;
+                const sOk = !query || item.title.toLowerCase().includes(query) || item.computed.toLowerCase().includes(query) || item.desc.toLowerCase().includes(query);
+                return cOk && sOk;
+            });
+
+            if (!list.length) {
+                container.innerHTML = `<p style="text-align:center; color:var(--muted); padding:35px;">پرامپتی با این عبارت یافت نشد! 🔍</p>`;
+                return;
+            }
+            const frag = document.createDocumentFragment();
+            list.forEach(item => frag.appendChild(buildCardDOM(item)));
+            container.appendChild(frag);
+        }
+
+        // اسکرول بی‌نهایت کامل و بدون باگ
+        window.addEventListener('scroll', () => {
+            if (!document.getElementById('bankTab').classList.contains('active') || busyScroll) return;
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500) {
+                busyScroll = true;
+                const added = spawnMorePrompts(4);
+                const container = document.getElementById('mainFeed');
+                const frag = document.createDocumentFragment();
+                added.forEach(item => {
+                    const cOk = activeCat === 'all' || item.cat === activeCat;
+                    const sOk = !query || item.title.toLowerCase().includes(query) || item.computed.toLowerCase().includes(query);
+                    if (cOk && sOk) frag.appendChild(buildCardDOM(item));
+                });
+                container.appendChild(frag);
+                setTimeout(() => { busyScroll = false; }, 220);
+            }
+        });
+
+        /* ۵. کپی ضد باگ و مدیریت ذخیره‌شده‌ها */
+        function copySafe(text, msg = "با موفقیت کپی شد! ✨") {
+            beep(680, 0.06);
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(() => toast(msg)).catch(() => fallbackCopy(text, msg));
+            } else {
+                fallbackCopy(text, msg);
+            }
+        }
+
+        function fallbackCopy(text, msg) {
+            const t = document.createElement('textarea');
+            t.value = text;
+            t.style.position = 'fixed';
+            t.style.left = '-9999px';
+            document.body.appendChild(t);
+            t.select();
+            try { document.execCommand('copy'); toast(msg); } catch (e) {}
+            document.body.removeChild(t);
+        }
+
+        window.copyItem = function(id) {
+            const item = store.get(id);
+            if (item) copySafe(item.computed, "پرامپت کپی شد! آماده اجرا در هوش مصنوعی 🤖");
+        };
+
+        window.toggleFav = function(id) {
+            beep(540, 0.05);
+            const idx = favIds.indexOf(id);
+            if (idx > -1) {
+                favIds.splice(idx, 1);
+                toast("از دفترچه شما حذف شد");
+            } else {
+                favIds.push(id);
+                toast("در دفترچه شما ذخیره شد ⭐");
+            }
+            localStorage.setItem('zp_master_favs', JSON.stringify(favIds));
+            document.getElementById('favCounter').textContent = favIds.length;
+
+            const btn = document.getElementById(`favbtn_${id}`);
+            if (btn) {
+                const isFav = favIds.includes(id);
+                btn.className = `act-btn ${isFav ? 'saved' : ''}`;
+                btn.innerHTML = `<i class="${isFav ? 'fa-solid' : 'fa-regular'} fa-bookmark"></i>`;
+            }
+            if (document.getElementById('savedTab').classList.contains('active')) renderSavedTab();
+        };
+
+        function renderSavedTab() {
+            const box = document.getElementById('savedContainer');
+            box.innerHTML = '';
+            const items = favIds.map(id => store.get(id)).filter(Boolean);
+            if (!items.length) {
+                box.innerHTML = `<p style="text-align:center; color:var(--muted); padding:35px;">دفترچه شما خالی است! روی نشانک کنار پرامپت‌ها بزنید یا از کادر بالا پرامپت خودتان را اضافه کنید. ⭐</p>`;
+                return;
+            }
+            const frag = document.createDocumentFragment();
+            items.forEach(item => frag.appendChild(buildCardDOM(item)));
+            box.appendChild(frag);
+        }
+
+        // افزودن پرامپت شخصی توسط کاربر
+        window.saveUserCustomPrompt = function() {
+            const title = document.getElementById('usrTitle').value.trim();
+            const code = document.getElementById('usrCode').value.trim();
+            if (!title || !code) {
+                toast("لطفاً عنوان و متن پرامپت را وارد کنید!");
+                return;
+            }
+            const id = "usr_" + Date.now();
+            const newObj = {
+                id, title, desc: "پرامپت اختصاصی ثبت‌شده توسط شما در دفترچه شخصی.",
+                code, vars: [], cat: "شخصی", ai: "Custom AI", ltr: /^[A-Za-z0-9]/.test(code)
+            };
+            addPromptToStore(newObj);
+            favIds.unshift(id);
+            localStorage.setItem('zp_master_favs', JSON.stringify(favIds));
+
+            try {
+                const list = JSON.parse(localStorage.getItem('zp_user_custom') || '[]');
+                list.unshift(newObj);
+                localStorage.setItem('zp_user_custom', JSON.stringify(list));
+            } catch (e) {}
+
+            document.getElementById('usrTitle').value = '';
+            document.getElementById('usrCode').value = '';
+            document.getElementById('favCounter').textContent = favIds.length;
+            renderSavedTab();
+            renderMainFeed();
+            toast("پرامپت شخصی شما ذخیره شد! 🎉");
+        };
+
+        // دانلود فایل پشتیبان .txt از ذخیره‌شده‌ها
+        window.exportSavedFile = function() {
+            const items = favIds.map(id => store.get(id)).filter(Boolean);
+            if (!items.length) {
+                toast("هنوز پرامپتی برای دانلود ذخیره نکرده‌اید!");
+                return;
+            }
+            let content = "=== Z-PROMPT MASTER | دفترچه پرامپت‌های من (@amir_zf1) ===\n\n";
+            items.forEach((it, idx) => {
+                content += `[${idx + 1}] ${it.title} (${it.ai})\n${it.computed}\n-----------------------------------------\n\n`;
+            });
+            const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = "Z-PROMPT-Collection.txt";
+            a.click();
+            toast("فایل پشتیبان دانلود شد! 📂");
+        };
+
+        /* ۶. مهندس پرامپت‌ساز ۳ حالته */
+        let bMode = 1;
+        let currentBuiltText = '';
+
+        window.setBuilderMode = function(m) {
+            beep(560, 0.04);
+            bMode = m;
+            [1, 2, 3].forEach(n => {
+                document.getElementById('mBtn' + n).classList.toggle('active', n === m);
+                document.getElementById('bBox' + n).style.display = n === m ? 'block' : 'none';
+            });
+            runBuilder();
+        };
+
+        window.runBuilder = function() {
+            let isLtr = true;
+            let badge = "PRO IMAGE 8K";
+            if (bMode === 1) {
+                const sub = document.getElementById('bImgSub').value.trim() || "A cybernetic samurai warrior";
+                const txt = document.getElementById('bImgTxt').value.trim();
+                const style = document.getElementById('bImgStyle').value;
+                const neg = document.getElementById('bImgNeg').value;
+                const txtPart = txt ? `, featuring bold glowing typography reading '${txt}' clearly visible` : '';
+                currentBuiltText = `${sub}${txtPart}, ${style}, cinematic volumetric lighting, masterpiece ${neg}`;
+            } else if (bMode === 2) {
+                isLtr = false;
+                badge = "CO-STAR FRAMEWORK";
+                const role = document.getElementById('bTxtRole').value;
+                const goal = document.getElementById('bTxtGoal').value.trim() || "افزایش بازدید و فروش پیج";
+                const tone = document.getElementById('bTxtTone').value;
+                currentBuiltText = `[ROLE]: تو ${role} هستی.\n[OBJECTIVE]: هدف دقیق من «${goal}» است.\n[STYLE & TONE]: لطفاً پاسخی ${tone} ارائه بده و از کلیشه‌های رباتیک پرهیز کن تا بتوانم بلافاصله آن را اجرا کنم.`;
+            } else {
+                badge = "MAGIC ENHANCER";
+                const raw = document.getElementById('bMagicInp').value.trim() || "A black sports car in rainy Tokyo";
+                currentBuiltText = `Masterpiece studio shot of ${raw}, hyper-detailed, shot on Hasselblad H6D 100c, 85mm lens f/1.4, dramatic rim lighting, ray-traced reflections, Unreal Engine 5, Octane Render, 8k resolution --ar 9:16 --v 6.0 --stylize 250 --no blurry, low quality, deformed, watermark`;
+            }
+
+            const resArea = document.getElementById('builderResultArea');
+            resArea.innerHTML = `
+                <div class="p-card">
+                    <div class="c-head">
+                        <div class="c-title"><i class="fa-solid fa-wand-magic-sparkles" style="color:var(--primary);"></i> خروجی مهندسی‌شده آماده کپی</div>
+                        <span class="ai-tag">${badge}</span>
+                    </div>
+                    <div class="code-area ${isLtr ? 'ltr' : ''}" id="builtOutCode"></div>
+                    <div class="c-foot">
+                        <span class="tag-b">Z-PROMPT ENGINE</span>
+                        <button class="act-btn primary" onclick="copySafe(currentBuiltText, 'پرامپت اختصاصی کپی شد! 🔥')">
+                            <i class="fa-regular fa-copy"></i> کپی پرامپت ساخته‌شده
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.getElementById('builtOutCode').textContent = currentBuiltText;
+        };
+
+        /* ۷. رندر رادار سایت‌ها و کدهای مخفی */
+        function initStaticTabs() {
+            document.getElementById('radarContainer').innerHTML = radarTools.map(t => `
+                <div class="r-card">
+                    <div>
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                            <strong style="font-size:1rem; color:#fff;">${t.name}</strong>
+                            <span class="ai-tag">${t.cat}</span>
+                        </div>
+                        <p style="font-size:0.83rem; color:var(--muted); line-height:1.6;">${t.desc}</p>
+                    </div>
+                    <a href="${t.url}" target="_blank" class="act-btn primary" style="justify-content:center;">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i> ورود به سایت ${t.name}
+                    </a>
+                </div>
+            `).join('');
+
+            const secBox = document.getElementById('secretContainer');
+            secCodesRender: {
+                secBox.innerHTML = '';
+                secretCodes.forEach((sc, i) => {
+                    const id = "sec_" + i;
+                    addPromptToStore({ id, title: sc.title, desc: sc.desc, code: sc.code, vars: [], cat: "کد مخفی", ai: "All AI Models", ltr: false });
+                    secBox.appendChild(buildCardDOM(store.get(id)));
+                });
+            }
+        }
+
+        /* ۸. سرچ، فیلتر، تب‌ها و شانسی */
+        const sInp = document.getElementById('searchInp');
+        const cBtn = document.getElementById('clearBtn');
+
+        sInp.addEventListener('input', e => {
+            query = e.target.value.trim().toLowerCase();
+            cBtn.style.display = query ? 'block' : 'none';
+            renderMainFeed();
+        });
+
+        window.resetSearch = function() {
+            sInp.value = '';
+            query = '';
+            cBtn.style.display = 'none';
+            renderMainFeed();
+        };
+
+        document.querySelectorAll('#catRow .chip').forEach(btn => {
+            btn.addEventListener('click', () => {
+                beep(520, 0.04);
+                document.querySelectorAll('#catRow .chip').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                activeCat = btn.getAttribute('data-cat');
+                renderMainFeed();
+            });
+        });
+
+        window.showTab = function(id, btn) {
+            beep(580, 0.04);
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            btn.classList.add('active');
+            if (id === 'savedTab') renderSavedTab();
+        };
+
+        window.copyRandom = function() {
+            const rId = promptIds[Math.floor(Math.random() * promptIds.length)];
+            const item = store.get(rId);
+            if (item) copySafe(item.computed, `پرامپت شانسی «${item.title}» کپی شد! 🎲`);
+        };
+
+        let toastTimer;
+        function toast(msg) {
+            const t = document.getElementById('toastEl');
+            t.textContent = msg;
+            t.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+        }
+
+        // راه‌اندازی اولیه
+        (function init() {
+            const savedTheme = localStorage.getItem('zp_theme');
+            if (savedTheme && savedTheme !== 'default') {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            }
+            document.getElementById('favCounter').textContent = favIds.length;
+            initStaticTabs();
+            renderMainFeed();
+            runBuilder();
+        })();
+    </script>
+</body>
+  </html>
